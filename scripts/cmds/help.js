@@ -3,13 +3,13 @@ const axios = require("axios");
 const path = require("path");
 const { getPrefix } = global.utils;
 const { commands, aliases } = global.GoatBot;
-const doNotDelete = "[ 𝗔  𝗬 𝗔 𝗡 ]"; 
+const doNotDelete = "[𝗞 𝗔 𝗠 𝗨 ]"; 
 
 module.exports = {
   config: {
     name: "help",
     version: "1.17",
-    author: "ArYan",
+    author: "xos Eren",
     countDown: 5,
     role: 0,
     shortDescription: {
@@ -34,7 +34,7 @@ module.exports = {
       const categories = {};
       let msg = "╭───────❁";
 
-      msg += `\n│𝗔𝗬𝗔𝗡 𝗛𝗘𝗟𝗣 𝗟𝗜𝗦𝗧\n╰────────────❁`; 
+      msg += `\n│𝗞𝗔𝗠𝗨 𝗛𝗘𝗟𝗣 𝗟𝗜𝗦𝗧\n╰────────────❁`; 
 
       for (const [name, value] of commands) {
         if (value.config.role > 1 && role < value.config.role) continue;
@@ -62,9 +62,9 @@ module.exports = {
       const totalCommands = commands.size;
       msg += `\n\n╭─────✰[𝗘𝗡𝗝𝗢𝗬]\n│>𝗧𝗢𝗧𝗔𝗟 𝗖𝗠𝗗𝗦: [${totalCommands}].\n│𝗧𝗬𝗣𝗘𝖳:[ ${prefix}𝗛𝗘𝗟𝗣 \n│.]\n╰────────────✰`;
       msg += ``;
-      msg += `\n╭─────✰\n│ ╣[𝗔  𝗬 𝗔 𝗡]╠\n╰────────────✰`; 
+      msg += `\n╭─────✰\n│ ╣[𝗞 𝗔 𝗠 𝗨]╠\n╰────────────✰`; 
 
-const helpListImages = [ "https://i.imgur.com/a3JShJK.jpeg" ];
+const helpListImages = [ "https://i.imgur.com/0Hhow1V.jpeg" ];
 
 
       const helpListImage = helpListImages[Math.floor(Math.random() * helpListImages.length)];
@@ -90,17 +90,17 @@ const helpListImages = [ "https://i.imgur.com/a3JShJK.jpeg" ];
         const usage = guideBody.replace(/{p}/g, prefix).replace(/{n}/g, configCommand.name);
 
         const response = `
-  ╭───⊙
-  │ 🔶 ${configCommand.name}
-  ├── INFO
-  │ 📝 𝗗𝗲𝘀𝗰𝗿𝗶𝗽𝘁𝗶𝗼𝗻: ${longDescription}
-  │ 👑 𝗔𝘂𝘁𝗵𝗼𝗿: ${author}
-  │ ⚙ 𝗚𝘂𝗶𝗱𝗲: ${usage}
-  ├── USAGE
-  │ 🔯 𝗩𝗲𝗿𝘀𝗶𝗼𝗻: ${configCommand.version || "1.0"}
-  │ ♻𝗥𝗼𝗹𝗲: ${roleText}
-  ╰────────────⊙`;
-
+╔═════════════════════╗
+║ 🔹 COMMAND: 🔶 ${configCommand.name}
+╠═══════════════════════╣
+║ 📌 Description: ${longDescription}
+║ 🆔 Aliases: ${configCommand.aliases}
+║ 📎 Version:  ${configCommand.version || "1.0"}
+║ 👤 Role: ${roleText}
+║ ⏳ Cooldown: ${configCommand.countDown}
+║ 👨‍💻 Author:  ${author}
+║ 📖 Usage: ${usage}
+╚═══════════════════════╝`;
         await message.reply(response);
       }
     }
