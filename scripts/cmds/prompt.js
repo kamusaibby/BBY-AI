@@ -5,7 +5,7 @@ const tinyurl = require('tinyurl');
 module.exports = {
   config: {
     name: "prompt",
-    aliases: [],
+    aliases: ["p"],
     version: "1.0",
     author: "Vex_Kshitiz",
     countDown: 5,
