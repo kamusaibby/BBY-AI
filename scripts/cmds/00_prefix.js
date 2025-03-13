@@ -5,9 +5,9 @@ module.exports = {
 config: {
 name: "prefix",
 version: "1.3",
-author: "xos Eren",
+author: "NTKHang || Edit by Ayan",
 countDown: 5,
-role: 2,
+role: 0,
 shortDescription: "Thay đổi prefix của bot",
 longDescription: "Thay đổi dấu lệnh của bot trong box chat của bạn hoặc cả hệ thống bot (chỉ admin bot)",
 category: "config",
