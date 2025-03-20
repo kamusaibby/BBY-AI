@@ -1,4 +1,3 @@
-Command executed successfully:
 const { getTime, drive } = global.utils;
 if (!global.temp.welcomeEvent)
 global.temp.welcomeEvent = {};
