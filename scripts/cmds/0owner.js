@@ -1,66 +1,90 @@
-const axios = require('axios');
-const fs = require('fs');
-const path = require('path');
+const util = require("util");
+const fs = require("fs");
+const path = require("path");
+const axios = require("axios");
+const exec = util.promisify(require("child_process").exec);
 
 module.exports = {
-config: {
-  name: "owner",
-  aurthor:"Tokodori",// Convert By Goatbot Tokodori 
-   role: 0,
-  shortDescription: " ",
-  longDescription: "",
-  category: "admin",
-  guide: "{pn}"
-},
+    config: {
+        name: "owner",
+        aliases: ["creator", "dev"],
+        version: "1.0",
+        author: "XOS Eren",
+        role: 0,
+        shortDescription: {
+            en: "Show the bot owner's information."
+        },
+        longDescription: {
+            en: "Displays details about the bot owner, including name, contact, and prefix."
+        },
+        category: "SYSTEM",
+        guide: {
+            en: "Use {pn} to see the bot owner's details."
+        }
+    },
 
-  onStart: async function ({ api, event }) {
-  try {
-    const ownerInfo = {
-      name: '𝗞𝗔𝗠𝗨',
-      gender: '𝗠𝗔𝗟𝗘',
-      age: '17+',
-      height: '𝗨𝗡𝗞𝗡𝗢𝗪𝗡',
-      choise: '𝗥𝗨𝗦𝗦𝗜𝗔𝗡',
-      nick: '𝗬𝗢𝗨𝗥 𝗣𝗜𝗫𝗫𝗜 '
-    };
+    onStart: async function ({ message, event, api }) {
+        try {
+            const spinnerFrames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+            let currentFrame = 0;
 
-    const bold = 'https://i.imgur.com/2DarfNC.mp4'; // Replace with your Google Drive videoid link https://drive.google.com/uc?export=download&id=here put your video id
+            // Send initial loading message
+            const loadingMessage = await api.sendMessage(`${spinnerFrames[0]} Gathering owner info...`, event.threadID);
+            
+            // Animate the spinner for 4 seconds
+            const intervalId = setInterval(async () => {
+                currentFrame = (currentFrame + 1) % spinnerFrames.length;
+                await api.editMessage(`${spinnerFrames[currentFrame]} Gathering owner info...`, loadingMessage.messageID);
+            }, 200);
 
-    const tmpFolderPath = path.join(__dirname, 'tmp');
+            // Wait for 4 seconds before showing the owner name
+            setTimeout(async () => {
+                clearInterval(intervalId);
 
-    if (!fs.existsSync(tmpFolderPath)) {
-      fs.mkdirSync(tmpFolderPath);
+                // Edit the message to show the owner's name after 4 seconds
+                await api.editMessage("👑 𝗕𝗢𝗧 𝗢𝗪𝗡𝗘𝗥 𝗜𝗡𝗙𝗢 👑\n\n📛 𝗡𝗮𝗺𝗲: 𝗬𝗢𝗨𝗥 𝗕𝗘𝗕", loadingMessage.messageID);
+
+                // Wait for another 2 seconds and show the rest of the info
+                setTimeout(async () => {
+                    const ownerInfo = `════════════════\n\n🙆‍♂️ 𝗡𝗮𝗺𝗲:      𝗧𝗢𝗠 🎀  
+
+📞 𝗖𝗼𝗻𝗧𝗮𝗰𝘁:    [𝗛𝗜𝗗𝗗𝗘𝗡]  
+
+🛠 𝗕𝗼𝘁 𝗩𝗲𝗿𝘀𝗶𝗼𝗻:  1.0
+  
+🛞 𝗣𝗿𝗲𝗳𝗶𝘅:  ( ${global.GoatBot.config.prefix} ) 
+
+💻 𝗣𝗼𝘄𝗲𝗿𝗲𝗱 𝗕𝘆:  𝗧𝗢𝗠 𝗕𝗕𝗬  
+
+🚀 𝗦𝘁𝗮𝘁𝘂𝘀:𝗥𝘂𝗻𝗻𝗶𝗻𝗴 𝗦𝗺𝗼𝗼𝘁𝗵𝗹𝘆 ✅`;
+
+                    // Online Image URL
+                    const imageUrl = "https://i.imgur.com/1XOcu8A.jpeg";
+                    const imagePath = path.join(__dirname, "owner.jpg");
+
+                    // Download the image
+                    const response = await axios({ url: imageUrl, responseType: "stream" });
+                    const writer = fs.createWriteStream(imagePath);
+                    response.data.pipe(writer);
+
+                    writer.on("finish", async () => {
+                        await api.sendMessage({ body: ownerInfo, attachment: fs.createReadStream(imagePath) }, event.threadID);
+                        fs.unlinkSync(imagePath); // Delete the image after sending
+                    });
+
+                    writer.on("error", async () => {
+                        await api.sendMessage(ownerInfo, event.threadID);
+                    });
+
+                    // Remove the loading spinner after the full info is displayed
+                    api.unsendMessage(loadingMessage.messageID);
+                }, 2000); // 2 sec delay before showing full info
+
+            }, 4000); // 4 sec delay before showing owner name
+
+        } catch (error) {
+            console.error("Error in owner.js:", error);
+            api.sendMessage(`⚠️ Error: ${error.message}`, event.threadID);
+        }
     }
-
-    const videoResponse = await axios.get(bold, { responseType: 'arraybuffer' });
-    const videoPath = path.join(tmpFolderPath, 'owner_video.mp4');
-
-    fs.writeFileSync(videoPath, Buffer.from(videoResponse.data, 'binary'));
-
-    const response = ` 
-╭[ .  ]•〆 𝗞𝗔𝗠𝗨 〆 ]  ─⦿
-╭────────────◊
-├‣ 𝐁𝐨𝐭 & 𝐎𝐰𝐧𝐞𝐫 𝐈𝐧𝐟𝐨𝐫𝐦𝐚𝐭𝐢𝐨𝐧 
-├‣ 𝐍𝐚𝐦𝐞: ${ownerInfo.name}
-├‣ 𝐆𝐞𝐧𝐝𝐞𝐫:  ${ownerInfo.gender}
-├‣ 𝐀𝐠𝐞 .${ownerInfo.age}
-├‣ 𝐍𝐢𝐜𝐤 : ${ownerInfo.nick}
-├‣ 𝐂𝐡𝐨𝐢𝐬𝐞:  ${ownerInfo.choise}   
-├‣ 𝐇𝐞𝐢𝐠𝐡𝐭 : ${ownerInfo.height}
-╰────────────◊ 
-`;
-
-    await api.sendMessage({
-      body: response,
-      attachment: fs.createReadStream(videoPath)
-    }, event.threadID, event.messageID);
-
-    if (event.body.toLowerCase().includes('ownerinfo')) {
-      api.setMessageReaction('🚀', event.messageID, (err) => {}, true);
-    }
-  } catch (error) {
-    console.error('Error in ownerinfo command:', error);
-    return api.sendMessage('An error occurred while processing the command.', event.threadID);
-  }
-},
 };
