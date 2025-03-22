@@ -1,16 +1,16 @@
 const axios = require("axios");
-const availableCmdsUrl = "https://raw.githubusercontent.com/ARYAN-AROHI-STORE/A4YA9-A40H1/refs/heads/main/CMDSRUL.json";
-const cmdUrlsJson = "https://raw.githubusercontent.com/ARYAN-AROHI-STORE/A4YA9-A40H1/refs/heads/main/CMDS.json";
+const availableCmdsUrl = "https://raw.githubusercontent.com/Mostakim0978/D1PT0/refs/heads/main/availableCmds.json";
+const cmdUrlsJson = "https://raw.githubusercontent.com/Mostakim0978/D1PT0/refs/heads/main/cmdUrls.json";
 const ITEMS_PER_PAGE = 10;
 
 module.exports.config = {
   name: "cmdstore",
   aliases: ["cs", "cmds"],
-  author: "ARYAN 🐔",
+  author: "Dipto",
   role: 0,
-  version: "0.1",
+  version: "6.9",
   description: {
-    en: "Commands Store of ArYan",
+    en: "Commands Store of Dipto",
   },
   countDown: 3,
   category: "goatbot",
@@ -37,7 +37,7 @@ module.exports.onStart = async function ({ api, event, args }) {
       } else {
         finalArray = cmds.filter(cmd => cmd.cmd.includes(query));
         if (finalArray.length === 0) {
-          return api.sendMessage(`🤡 You cannot find this command "${query}" not found.`, event.threadID, event.messageID);
+          return api.sendMessage(`❌ | Command "${query}" not found.`, event.threadID, event.messageID);
         }
       }
     }
@@ -54,11 +54,11 @@ module.exports.onStart = async function ({ api, event, args }) {
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const cmdsToShow = finalArray.slice(startIndex, endIndex);
-    let msg = `╭───۞ 𝗖𝗠𝗗 𝗦𝗧𝗢𝗥𝗘\n│\n├🌼 page ${page} of ${totalPages} page(s)\n├🤡 Total ${finalArray.length} commands\n`;
+    let msg = `╭───✦ Cmd Store ✦───╮\n│ Page ${page} of ${totalPages} page(s)\n│ Total ${finalArray.length} commands\n`;
     cmdsToShow.forEach((cmd, index) => {
-      msg += `├──۞ ${startIndex + index + 1}. ${cmd.cmd}\n├👑 AUTHOR: ${cmd.author}\n├🌐 DATE: ${cmd.update || null}\n`;
+      msg += `│ ───✦ ${startIndex + index + 1}. ${cmd.cmd}\n│ AUTHOR: ${cmd.author}\n│ UPDATE: ${cmd.update || null}\n`;
     });
-    msg += `╰─────────────۞`;
+    msg += `╰─────────────⧕`;
 
     if (page < totalPages) {
       msg += `\nType "${this.config.name} ${page + 1}" for more commands.`;
@@ -91,7 +91,7 @@ global.GoatBot.onReply.set(info.messageID, {
 module.exports.onReply = async function ({ api, event, Reply }) {
 
   if (Reply.author != event.senderID) {
-    return api.sendMessage("Error 🤡", event.threadID, event.messageID);
+    return api.sendMessage("Who are you? 🐸", event.threadID, event.messageID);
   }
   const reply = parseInt(event.body);
   const startIndex = (Reply.page - 1) * ITEMS_PER_PAGE;
@@ -117,7 +117,7 @@ const  { status }  = Reply.cmdName[reply - 1]
       );
     }
     api.unsendMessage(Reply.messageID);
-    const msg = `╭────────۞\n├😘 STATUS :${status || null}\n├♾️ Command Url: ${selectedCmdUrl}\n╰─────────────۞`;
+    const msg = `╭───────⭓\n│ STATUS :${status || null}\n│ Command Url: ${selectedCmdUrl}\n╰─────────────⭓`;
     api.sendMessage(msg, event.threadID, event.messageID);
   } catch (error) {
     api.sendMessage(
@@ -126,4 +126,4 @@ const  { status }  = Reply.cmdName[reply - 1]
       event.messageID
     );
   }
-}
+};
