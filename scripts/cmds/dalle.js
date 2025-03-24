@@ -3,7 +3,7 @@ const baseApiUrl = "https://www.noobs-api.rf.gd/dipto";
 
   const config = {
     name: "dalle",
-    aliases: ["bing", "create", "imagine"],
+    aliases: ["bing", "create", "imagine2"],
     version: "1.1",
     author: "Dipto",
     credits: "Dipto",
